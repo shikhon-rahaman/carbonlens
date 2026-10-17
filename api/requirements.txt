@@ -16,4 +16,4 @@ slowapi==0.1.9
 starlette==1.8.0
 sqlalchemy==2.0.41
 uvicorn[standard]==0.34.2
-web3==7.13.0
+web3==8.0.0
