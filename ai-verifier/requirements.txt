@@ -8,4 +8,4 @@ rasterio==1.4.4
 requests==2.33.1
 ruff==0.12.5
 shapely==2.2.0
-web3==7.13.0
+web3==8.0.0
