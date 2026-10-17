@@ -1,0 +1,33 @@
+# Secrets and local configuration
+.env*
+!.env.example
+
+# Node.js
+node_modules/
+node_modules.incomplete/
+.next/
+coverage/
+.npm-cache/
+.hardhat-appdata/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Blockchain build output
+artifacts/
+cache/
+*.bin
+
+# Local data and databases
+*.sqlite
+*.sqlite3
+*.db
+data/evidence/
+api/data/evidence/
+
+contracts/coverage.json
+web/test-results/
+*.tsbuildinfo

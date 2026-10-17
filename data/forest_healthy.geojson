@@ -1,0 +1,14 @@
+{
+  "type": "Feature",
+  "properties": {"id": "forest_healthy", "name": "Healthy forest sample"},
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-60.0000, -3.0000],
+      [-59.9940, -3.0000],
+      [-59.9940, -2.9940],
+      [-60.0000, -2.9940],
+      [-60.0000, -3.0000]
+    ]]
+  }
+}

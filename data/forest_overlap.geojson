@@ -1,0 +1,14 @@
+{
+  "type": "Feature",
+  "properties": {"id": "forest_overlap", "name": "Partially overlapping sample"},
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-59.9970, -3.0000],
+      [-59.9910, -3.0000],
+      [-59.9910, -2.9940],
+      [-59.9970, -2.9940],
+      [-59.9970, -3.0000]
+    ]]
+  }
+}

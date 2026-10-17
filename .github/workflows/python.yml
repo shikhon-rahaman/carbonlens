@@ -1,0 +1,35 @@
+name: Python checks
+
+on:
+  push:
+    branches: [main]
+    paths: ['ai-verifier/**', 'api/**', '.github/workflows/python.yml']
+  pull_request:
+    branches: [main]
+    paths: ['ai-verifier/**', 'api/**', '.github/workflows/python.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install and check Python projects when configured
+        shell: bash
+        run: |
+          for project in ai-verifier api; do
+            if [ -f "$project/requirements.txt" ]; then
+              python -m pip install --upgrade pip
+              python -m pip install -r "$project/requirements.txt"
+              python -m pip install ruff bandit pip-audit pytest
+              ruff check "$project"
+              bandit -r "$project" -x "$project/tests"
+              pip-audit -r "$project/requirements.txt"
+              pytest "$project"
+            fi
+          done

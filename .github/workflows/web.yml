@@ -1,0 +1,34 @@
+name: Web checks
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/**', '.github/workflows/web.yml']
+  pull_request:
+    branches: [main]
+    paths: ['web/**', '.github/workflows/web.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install, audit, lint, type-check, and build when configured
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+            npm run lint
+            npm run typecheck
+            npm audit --audit-level=high
+            npm run build
+          fi
