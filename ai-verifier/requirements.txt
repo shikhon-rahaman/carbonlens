@@ -6,6 +6,6 @@ pystac-client==0.9.0
 pytest==9.0.3
 rasterio==1.4.4
 requests==2.33.1
-ruff==0.12.5
+ruff==0.17.0
 shapely==2.2.0
 web3==7.13.0
