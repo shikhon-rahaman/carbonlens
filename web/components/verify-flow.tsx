@@ -26,11 +26,11 @@ const demoSites = [
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-60, -3],
-          [-59.994, -3],
-          [-59.994, -2.994],
-          [-60, -2.994],
-          [-60, -3]
+          [30, 10],
+          [30.006, 10],
+          [30.006, 10.006],
+          [30, 10.006],
+          [30, 10]
         ]]
       }
     }
@@ -45,11 +45,11 @@ const demoSites = [
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-60.1, -3.1],
-          [-60.092, -3.1],
-          [-60.092, -3.092],
-          [-60.1, -3.092],
-          [-60.1, -3.1]
+          [30.1, 10.1],
+          [30.108, 10.1],
+          [30.108, 10.108],
+          [30.1, 10.108],
+          [30.1, 10.1]
         ]]
       }
     }
@@ -63,11 +63,11 @@ const demoSites = [
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-59.997, -3],
-          [-59.991, -3],
-          [-59.991, -2.994],
-          [-59.997, -2.994],
-          [-59.997, -3]
+          [30.003, 10],
+          [30.009, 10],
+          [30.009, 10.006],
+          [30.003, 10.006],
+          [30.003, 10]
         ]]
       }
     }
@@ -83,6 +83,7 @@ const verificationStages = [
 
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 const cachedDemoMode = process.env.NEXT_PUBLIC_CACHED_DEMO_MODE === "true";
+const developmentBypass = process.env.NODE_ENV === "development" && !turnstileSiteKey;
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((module) => module.Turnstile),
   { ssr: false }
@@ -181,8 +182,6 @@ export function VerifyFlow() {
       return;
     }
 
-    const developmentBypass =
-      (process.env.NODE_ENV === "development" && !turnstileSiteKey) || cachedDemoMode;
     const token = developmentBypass ? "local-development-bypass" : turnstileToken;
     if (!token) {
       setError("Complete the bot check before submitting.");
@@ -381,10 +380,15 @@ export function VerifyFlow() {
                 <p className="font-semibold">{name.trim()}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{Number(hectares).toLocaleString()} claimed hectares</p>
               </div>
-              {cachedDemoMode ? (
+              {cachedDemoMode && (
+                <p className="text-sm text-muted-foreground">
+                  Reviewed cached sample satellite data will be used; bot verification is still required.
+                </p>
+              )}
+              {developmentBypass ? (
                 <div className="flex gap-3 rounded-lg border border-warning/25 bg-warning/10 p-4 text-sm leading-6">
                   <ShieldCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-warning" />
-                  <p>Local cached demo mode uses reviewed sample satellite data and skips Turnstile. Successful registrations still require a real local testnet transaction.</p>
+                  <p>The development-only placeholder bot-check token is accepted only by an API running with ENV=development and TURNSTILE_DEV_BYPASS=true.</p>
                 </div>
               ) : turnstileSiteKey ? (
                 <Turnstile
@@ -397,11 +401,6 @@ export function VerifyFlow() {
                   options={{ action: "verify", theme: "auto", appearance: "interaction-only" }}
                   siteKey={turnstileSiteKey}
                 />
-              ) : process.env.NODE_ENV === "development" ? (
-                <div className="flex gap-3 rounded-lg border border-warning/25 bg-warning/10 p-4 text-sm leading-6">
-                  <ShieldCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-warning" />
-                  <p>The browser sends a development placeholder token. The API accepts it only with ENV=development and TURNSTILE_DEV_BYPASS=true.</p>
-                </div>
               ) : (
                 <p className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm leading-6">
                   Turnstile is not configured. Verification is unavailable until the public site key is set.
@@ -414,9 +413,7 @@ export function VerifyFlow() {
                 <Button
                   disabled={
                     busy ||
-                    (!turnstileToken &&
-                      process.env.NODE_ENV !== "development" &&
-                      !cachedDemoMode)
+                    (!turnstileToken && !developmentBypass)
                   }
                   type="submit"
                 >

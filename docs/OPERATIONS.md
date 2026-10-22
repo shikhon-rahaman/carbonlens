@@ -84,8 +84,14 @@ Set-Location C:\Users\SHIKHON\Desktop\carbonlens
 $env:ENV = "development"
 $env:ALLOWED_ORIGINS = "http://localhost:3000"
 $env:DATABASE_URL = "sqlite:///./carbonlens.db"
-.\ai-verifier\.venv\Scripts\python.exe -m uvicorn main:app --app-dir api --host 127.0.0.1 --port 8000
+$env:PORT = "8000"
+.\ai-verifier\.venv\Scripts\python.exe -m uvicorn main:app --app-dir api --host 0.0.0.0 --port $env:PORT
 ```
+
+For the Render web service, use this repository-root start command:
+`python -m uvicorn main:app --app-dir api --host 0.0.0.0 --port $PORT`.
+Render supplies `PORT`; binding to `0.0.0.0` makes the service reachable through
+its proxy.
 
 For a local run without Turnstile credentials, set `TURNSTILE_DEV_BYPASS=true` only
 while `ENV=development`. Never enable the bypass in another environment. The API
@@ -94,8 +100,10 @@ configure the testnet `RPC_URL`, `CHAIN_ID`, `CONTRACT_ADDRESS`,
 `VERIFIER_PRIVATE_KEY`, `TURNSTILE_SECRET`, and a non-wildcard `ALLOWED_ORIGINS`.
 The API verifies the configured address and chain against deployment metadata in
 `shared/contract.json`; deploy the registry before enabling on-chain registration.
-SQLite is the local default; set `DATABASE_URL` to a PostgreSQL SQLAlchemy URL for a
-Postgres deployment. Pinata failures use the local ignored `api/data/evidence/` store.
+SQLite is the local default; set production `DATABASE_URL` to a
+`postgresql://` SQLAlchemy URL for Render Postgres. The API selects its installed
+Psycopg 3 driver and creates tables on first startup. Pinata failures use the
+local ignored `api/data/evidence/` store.
 
 Run the verifier and API tests, lint, security scan, and dependency audit from the
 repository root:

@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 os.environ["ENV"] = "development"
 os.environ["DATABASE_URL"] = "sqlite://"
@@ -15,6 +15,7 @@ import pytest
 import requests
 from fastapi.testclient import TestClient
 from pydantic import SecretStr, ValidationError
+from sqlalchemy.engine import make_url
 from web3 import Web3
 
 import db
@@ -304,6 +305,67 @@ def test_production_settings_fail_fast_and_reject_cors_wildcards():
             verifier_private_key=SecretStr("verifier-test"),
             turnstile_secret=SecretStr("turnstile-test"),
         )
+    production_demo = Settings(
+        env="production",
+        allowed_origins="https://carbonlens.example",
+        database_url="postgresql://db.example/carbonlens",
+        rpc_url=SecretStr("https://rpc.example"),
+        chain_id=11155111,
+        contract_address="0x" + "1" * 40,
+        verifier_private_key=SecretStr("verifier-test"),
+        turnstile_secret=SecretStr("turnstile-test"),
+        cached_demo_mode=True,
+    )
+    assert production_demo.cached_demo_mode is True
+    with pytest.raises(ValidationError, match="bypass is not allowed in production"):
+        Settings(
+            env="production",
+            allowed_origins="https://carbonlens.example",
+            database_url="postgresql://db.example/carbonlens",
+            rpc_url=SecretStr("https://rpc.example"),
+            chain_id=11155111,
+            contract_address="0x" + "1" * 40,
+            verifier_private_key=SecretStr("verifier-test"),
+            turnstile_secret=SecretStr("turnstile-test"),
+            turnstile_dev_bypass=True,
+        )
+
+
+def test_postgresql_database_urls_select_installed_psycopg_driver():
+    assert db._sqlalchemy_database_url(
+        "postgresql://db.example/carbonlens"
+    ) == "postgresql+psycopg://db.example/carbonlens"
+    assert make_url(
+        db._sqlalchemy_database_url("postgresql://db.example/carbonlens")
+    ).get_dialect().driver == "psycopg"
+    assert db._sqlalchemy_database_url("postgresql+psycopg://db.example/carbonlens") == (
+        "postgresql+psycopg://db.example/carbonlens"
+    )
+
+
+def test_production_cached_demo_still_checks_turnstile(monkeypatch):
+    settings = Settings(
+        env="production",
+        allowed_origins="https://carbonlens.example",
+        database_url="postgresql://db.example/carbonlens",
+        rpc_url=SecretStr("https://rpc.example"),
+        chain_id=11155111,
+        contract_address="0x" + "1" * 40,
+        verifier_private_key=SecretStr("verifier-test"),
+        turnstile_secret=SecretStr("turnstile-test"),
+        cached_demo_mode=True,
+    )
+    response = Mock()
+    response.json.return_value = {"success": True}
+    post = Mock(return_value=response)
+    monkeypatch.setattr(main.requests, "post", post)
+
+    assert asyncio.run(main.verify_turnstile("real-turnstile-token", settings))
+    post.assert_called_once_with(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        data={"secret": "turnstile-test", "response": "real-turnstile-token"},
+        timeout=5,
+    )
 
 
 def test_turnstile_bypass_is_available_only_in_development():

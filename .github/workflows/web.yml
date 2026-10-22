@@ -19,6 +19,7 @@ jobs:
         working-directory: web
     env:
       NEXT_PUBLIC_CACHED_DEMO_MODE: "true"
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

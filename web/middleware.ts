@@ -16,7 +16,7 @@ export function middleware(request: NextRequest): NextResponse {
     "frame-ancestors 'none'",
     "form-action 'self'",
     `script-src 'self'${isDevelopment ? " 'unsafe-eval'" : ""} 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com`,
-    "style-src 'self' 'sha256-skqujXORqzxt1aE0NNXxujEanPTX6raoqSscTV/Ww/Y='",
+    `style-src 'self' 'nonce-${nonce}' 'sha256-skqujXORqzxt1aE0NNXxujEanPTX6raoqSscTV/Ww/Y='`,
     "style-src-attr 'unsafe-inline'",
     "img-src 'self' data: blob: https://*.basemaps.cartocdn.com",
     "font-src 'self' data:",

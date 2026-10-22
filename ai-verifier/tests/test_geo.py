@@ -73,8 +73,8 @@ def test_rejects_unsupported_or_invalid_geometry(document):
 
 
 def test_rejects_too_many_vertices():
-    ring = [[-60.0 + index * 0.00001, -3.0] for index in range(500)]
-    ring.extend([[-60.0, -2.99], [-60.0, -3.0]])
+    ring = [[30.0 + index * 0.00001, 10.0] for index in range(500)]
+    ring.extend([[30.0, 10.01], [30.0, 10.0]])
     with pytest.raises(GeoJSONError, match="vertices"):
         parse_geojson(polygon_document([ring]))
 
@@ -92,18 +92,18 @@ def test_area_is_plausible_for_sample_polygon():
 
 def test_accepts_limited_holes_and_rejects_excessive_holes():
     exterior = [
-        [-60.0, -3.0],
-        [-59.994, -3.0],
-        [-59.994, -2.994],
-        [-60.0, -2.994],
-        [-60.0, -3.0],
+        [30.0, 10.0],
+        [30.006, 10.0],
+        [30.006, 10.006],
+        [30.0, 10.006],
+        [30.0, 10.0],
     ]
     hole = [
-        [-59.999, -2.999],
-        [-59.997, -2.999],
-        [-59.997, -2.997],
-        [-59.999, -2.997],
-        [-59.999, -2.999],
+        [30.001, 10.001],
+        [30.003, 10.001],
+        [30.003, 10.003],
+        [30.001, 10.003],
+        [30.001, 10.001],
     ]
     with_hole = parse_geojson(polygon_document([exterior, hole]))
     assert len(with_hole.interiors) == 1
@@ -112,11 +112,11 @@ def test_accepts_limited_holes_and_rejects_excessive_holes():
     for index in range(MAX_HOLES + 1):
         offset = index * 0.0002
         holes.append([
-            [-59.999 + offset, -2.999],
-            [-59.9989 + offset, -2.999],
-            [-59.9989 + offset, -2.9989],
-            [-59.999 + offset, -2.9989],
-            [-59.999 + offset, -2.999],
+            [30.001 + offset, 10.001],
+            [30.0011 + offset, 10.001],
+            [30.0011 + offset, 10.0011],
+            [30.001 + offset, 10.0011],
+            [30.001 + offset, 10.001],
         ])
     with pytest.raises(GeoJSONError, match="holes"):
         parse_geojson(polygon_document([exterior, *holes]))
@@ -135,11 +135,11 @@ def test_precision_six_cells_hash_to_bytes32():
 def test_polygon_cell_cap_rejects_instead_of_truncating():
     large_polygon = Polygon(
         [
-            (-60.0, -3.0),
-            (-59.8, -3.0),
-            (-59.8, -2.85),
-            (-60.0, -2.85),
-            (-60.0, -3.0),
+            (30.0, 10.0),
+            (30.2, 10.0),
+            (30.2, 10.15),
+            (30.0, 10.15),
+            (30.0, 10.0),
         ]
     )
     with pytest.raises(GeoJSONError, match="too many geohash cells"):
@@ -162,11 +162,11 @@ def test_neighbor_expansion_flags_nearby_shifted_polygon():
     healthy = load_polygon("forest_healthy.geojson")
     shifted = Polygon(
         [
-            (-59.9900, -3.0000),
-            (-59.9840, -3.0000),
-            (-59.9840, -2.9940),
-            (-59.9900, -2.9940),
-            (-59.9900, -3.0000),
+            (30.0100, 10.0000),
+            (30.0160, 10.0000),
+            (30.0160, 10.0060),
+            (30.0100, 10.0060),
+            (30.0100, 10.0000),
         ]
     )
     assert overlap_ratio(healthy, shifted) == 0

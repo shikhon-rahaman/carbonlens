@@ -146,11 +146,11 @@ def main_run() -> int:
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [[
-                        [-60.0, -3.0],
-                        [-59.99, -2.99],
-                        [-59.99, -3.0],
-                        [-60.0, -2.99],
-                        [-60.0, -3.0],
+                        [30.0, 10.0],
+                        [30.01, 10.01],
+                        [30.01, 10.0],
+                        [30.0, 10.01],
+                        [30.0, 10.0],
                     ]],
                 },
             }
@@ -165,8 +165,8 @@ def main_run() -> int:
         def high_vertex_geojson() -> str:
             coordinates = [
                 [
-                    round(-60.0 + 0.002 * math.cos(2 * math.pi * index / 10_000), 4),
-                    round(-3.0 + 0.002 * math.sin(2 * math.pi * index / 10_000), 4),
+                    round(30.0 + 0.002 * math.cos(2 * math.pi * index / 10_000), 4),
+                    round(10.0 + 0.002 * math.sin(2 * math.pi * index / 10_000), 4),
                 ]
                 for index in range(10_000)
             ]

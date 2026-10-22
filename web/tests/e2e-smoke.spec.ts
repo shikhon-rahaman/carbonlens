@@ -44,16 +44,23 @@ async function mockLocalApi(page: Page) {
 }
 
 async function completeHealthyDemo(page: Page) {
+  const styleViolations: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error" && message.text().includes("style-src")) {
+      styleViolations.push(message.text());
+    }
+  });
   await mockLocalApi(page);
   await page.goto("/verify");
   await page.getByRole("button", { name: /Healthy forest/ }).click();
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("heading", { name: /Project details/ })).toBeVisible();
   await page.getByRole("button", { name: "Continue" }).click();
-  await expect(page.getByText(/Local cached demo mode/)).toBeVisible();
+  await expect(page.getByText(/Reviewed cached sample satellite data will be used; bot verification is still required/)).toBeVisible();
   await page.getByRole("button", { name: "Submit for verification" }).click();
   await expect(page).toHaveURL(/\/projects\/browser-smoke-project$/);
   await expect(page.getByRole("heading", { name: "Healthy forest sample" })).toBeVisible();
+  expect(styleViolations).toEqual([]);
 }
 
 test("production CSP keeps strict-dynamic without unsafe-eval", async ({ request }) => {
@@ -62,6 +69,10 @@ test("production CSP keeps strict-dynamic without unsafe-eval", async ({ request
   const policy = response.headers()["content-security-policy"];
   expect(policy).toContain("'strict-dynamic'");
   expect(policy).not.toContain("'unsafe-eval'");
+  expect(policy).toMatch(/style-src 'self' 'nonce-[^']+'/);
+  expect(policy).toContain("style-src-attr 'unsafe-inline'");
+  expect(policy).toContain("https://challenges.cloudflare.com");
+  expect(policy).toContain("http://localhost:8000");
 });
 
 test("main verification flow works at a desktop viewport", async ({ page }) => {

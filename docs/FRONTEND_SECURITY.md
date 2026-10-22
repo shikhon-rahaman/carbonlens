@@ -1,6 +1,6 @@
 # Frontend security policy
 
-The App Router applies security headers in `web/next.config.js`. Its middleware
+The App Router applies static security headers in `web/next.config.js`. Its middleware
 generates a fresh per-request nonce, sends the corresponding Content Security Policy
 to Next.js during rendering, and returns that policy to the browser so framework
 scripts can run without permitting arbitrary inline scripts. `script-src` never uses
@@ -18,7 +18,7 @@ scripts can run without permitting arbitrary inline scripts. `script-src` never 
 | `script-src 'self'` | Serve the application’s own scripts. |
 | Per-request `nonce-…` and `'strict-dynamic'` in middleware | Authorize Next.js inline bootstrap scripts only when they carry the unpredictable request nonce; no blanket inline permission. |
 | `https://challenges.cloudflare.com` in `script-src` and `frame-src` | Load and frame the Cloudflare Turnstile widget when the verification flow is enabled. |
-| `style-src 'self'` | Allow compiled same-origin stylesheets. |
+| `style-src 'self'` and per-request `nonce-…` | Allow compiled same-origin stylesheets and explicitly nonce-bearing inline style elements. |
 | `sha256-skqujXORqzxt1aE0NNXxujEanPTX6raoqSscTV/Ww/Y=` | Allow next-themes’ exact temporary transition-suppression stylesheet; arbitrary inline style blocks remain blocked. |
 | `style-src-attr 'unsafe-inline'` | Permit Leaflet runtime map positioning styles; this does not permit inline scripts or `<style>` blocks. |
 | `img-src 'self' data: blob: https://*.basemaps.cartocdn.com` | Allow local/interface images, generated previews, and map tiles from the configured Carto basemap host. |
@@ -34,6 +34,12 @@ No provider API key, signing key, database credential, or other secret may use a
 `NEXT_PUBLIC_` variable. The public API base URL, explorer URL, GitHub URL, chain ID,
 contract address, and Turnstile site key are identifiers/configuration, not secrets.
 Server-side verification secrets must remain in the API process.
+
+`style-src-attr 'unsafe-inline'` is limited to style attributes set by the Leaflet
+map renderer and animated components. It does not permit inline scripts or inline
+`<style>` blocks. Style elements require the per-request nonce or the exact
+next-themes transition hash above. The policy deliberately avoids enabling
+`'unsafe-inline'` for the full `style-src` directive.
 
 ## Other response headers
 

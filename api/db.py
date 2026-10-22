@@ -14,7 +14,13 @@ from sqlalchemy.pool import StaticPool
 
 from config import get_settings
 
-_database_url = get_settings().database_url
+def _sqlalchemy_database_url(database_url: str) -> str:
+    if database_url.startswith("postgresql://"):
+        return database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return database_url
+
+
+_database_url = _sqlalchemy_database_url(get_settings().database_url)
 _connect_args: dict[str, Any] = {}
 _engine_options: dict[str, Any] = {"pool_pre_ping": True}
 if _database_url.startswith("sqlite"):

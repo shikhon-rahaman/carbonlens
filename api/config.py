@@ -109,8 +109,6 @@ class Settings(BaseSettings):
                 raise ValueError("Production DATABASE_URL must use PostgreSQL.")
         if self.env.lower() != "development" and self.turnstile_dev_bypass:
             raise ValueError("Turnstile bypass is allowed only in development.")
-        if self.env.lower() != "development" and self.cached_demo_mode:
-            raise ValueError("Cached demo mode is allowed only in development.")
         if self.contract_address is not None:
             if len(self.contract_address) != 42 or not self.contract_address.startswith("0x"):
                 raise ValueError("CONTRACT_ADDRESS must be a 20-byte hexadecimal address.")

@@ -19,12 +19,15 @@ when the script exits.
 
 The API's `CACHED_DEMO_MODE=true` switch bypasses satellite-provider calls and
 selects only the reviewed packaged `healthy_forest` or `deforested` NDVI series.
-It is rejected outside `ENV=development`. The frontend
+It may be enabled in production for those sample scenarios, but never bypasses
+server-side Turnstile validation, rate limits, or the daily registration cap. The frontend
 `NEXT_PUBLIC_CACHED_DEMO_MODE=true` switch makes the local-only flow explicit
-and displays the Turnstile bypass notice; API-side
+and labels the cached data; it does not skip Turnstile. Only a development build
+without a site key displays the development bypass notice. API-side
 `TURNSTILE_DEV_BYPASS=true` is also required. Registrations still submit a
 real transaction to the local Hardhat chain—no simulated transaction hashes
-are returned. Keep these flags disabled in deployed environments.
+are returned. Keep `TURNSTILE_DEV_BYPASS=false` in deployed environments and
+configure both the public Turnstile site key and server-side secret.
 
 `scripts/abuse_tests.py` runs against an isolated in-memory SQLite database and
 does not contact third-party services. It exercises request-body and geometry

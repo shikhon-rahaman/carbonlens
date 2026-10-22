@@ -17,10 +17,10 @@ Request:
 ```
 
 `demo_scenario` is optional and accepts `healthy` or `deforested`. It is accepted
-only when the API runs in development with `CACHED_DEMO_MODE=true`; the API then
-uses the corresponding reviewed packaged NDVI series and makes no satellite
-provider requests. Without the flag, callers must omit this field. The local
-cached demo is not available in production.
+when `CACHED_DEMO_MODE=true`; the API then uses the corresponding reviewed
+packaged NDVI series and makes no satellite provider requests. Without the flag,
+callers must omit this field. Cached samples do not bypass Turnstile, rate limits,
+the daily registration cap, or ordinary on-chain registration behavior.
 
 Successful response:
 
