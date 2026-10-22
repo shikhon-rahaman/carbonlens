@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   test-and-analyze:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: contracts
@@ -25,12 +25,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Run Hardhat tests and Slither when configured
+      - name: Compile, test, and analyze contracts
         shell: bash
         run: |
           if [ -f package-lock.json ]; then
             npm ci
+            npm run compile
             npm test
+            npm run lint
             python -m pip install slither-analyzer
-            slither .
+            npm run slither
           fi

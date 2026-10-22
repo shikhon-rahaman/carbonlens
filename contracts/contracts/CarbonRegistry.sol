@@ -143,6 +143,7 @@ contract CarbonRegistry is ERC1155, AccessControlDefaultAdminRules, Pausable, Re
     /// @param projectId Sequential project identifier.
     /// @return project Stored project data.
     function getProject(uint256 projectId) external view returns (Project memory project) {
+        // slither-disable-next-line timestamp
         if (projectId >= projects.length) revert ProjectNotFound(projectId);
         return projects[projectId];
     }

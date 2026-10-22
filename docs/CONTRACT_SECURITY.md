@@ -10,7 +10,7 @@
 - Solhint: `npm run lint` completed without findings. The configuration targets Solidity `^0.8.24` and the Solhint recommended rules.
 - Coverage: `npm run coverage` passed all 17 tests. Overall coverage is 100% statements, 96.30% branches, 100% functions, and 98.21% lines. `CarbonRegistry.sol` specifically is 100% statements, 98.08% branches, 100% functions, and 100% lines.
 - Randomized testing: seeded pseudo-random valid registrations and overlapping-registration attempts run deterministically with fixed seeds, so failures are reproducible.
-- Slither: not installed or available on PATH in the Windows environment; therefore no Slither result is claimed. Install and run it using the Windows commands below, then add each emitted finding and its resolution to this document.
+- Slither 0.11.6: completed without findings after a targeted suppression for a false positive on the sequential project-ID bounds check in `getProject`. The check compares an ID with the project array length and does not use a timestamp.
 
 ## Findings and resolutions
 

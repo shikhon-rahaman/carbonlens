@@ -13,10 +13,12 @@ permissions:
 
 jobs:
   quality:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: web
+    env:
+      NEXT_PUBLIC_CACHED_DEMO_MODE: "true"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,4 +33,6 @@ jobs:
             npm run typecheck
             npm audit --audit-level=high
             npm run build
+            npx playwright install --with-deps chromium
+            npm test
           fi
