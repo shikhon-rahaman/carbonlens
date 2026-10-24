@@ -85,13 +85,11 @@ $env:ENV = "development"
 $env:ALLOWED_ORIGINS = "http://localhost:3000"
 $env:DATABASE_URL = "sqlite:///./carbonlens.db"
 $env:PORT = "8000"
-.\ai-verifier\.venv\Scripts\python.exe -m uvicorn main:app --app-dir api --host 0.0.0.0 --port $env:PORT
+.\ai-verifier\.venv\Scripts\python.exe -m uvicorn main:app --app-dir api --host 127.0.0.1 --port $env:PORT
 ```
 
-For the Render web service, use this repository-root start command:
-`python -m uvicorn main:app --app-dir api --host 0.0.0.0 --port $PORT`.
-Render supplies `PORT`; binding to `0.0.0.0` makes the service reachable through
-its proxy.
+For the optional Render hosted service, use the start command in the
+[optional hosted deployment guide](./DEPLOYMENT.md).
 
 For a local run without Turnstile credentials, set `TURNSTILE_DEV_BYPASS=true` only
 while `ENV=development`. Never enable the bypass in another environment. The API

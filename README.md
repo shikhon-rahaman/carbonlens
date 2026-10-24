@@ -1,5 +1,7 @@
 # CarbonLens
 
+AI-scored vegetation evidence plus an on-chain registry that blocks double counting of the same land, running on Sepolia.
+
 **CarbonLens turns vegetation time-series into reviewable, on-chain testnet evidence for transparent carbon-market discussions—not proof of carbon storage.**
 
 ## The problem
@@ -168,6 +170,19 @@ audit currently has unresolved advisories; details are in the security report.
 
 Demo: watch the video linked on our Devpost submission, or run it locally (instructions below).
 
+## Try it without any keys
+
+From PowerShell at the repository root, run:
+
+```powershell
+.\scripts\e2e_demo.ps1
+python .\scripts\abuse_tests.py
+```
+
+The end-to-end demo starts a temporary local Hardhat chain, so no Sepolia RPC,
+wallet, or provider keys are needed. The separate Sepolia evidence is available
+in the [linked transaction above](https://sepolia.etherscan.io/tx/0x9634b36e29dac9e3a71ec882179bba055c6533f65e268854865a3c42b6135b1e).
+
 ## CI
 
 [![Web checks](https://github.com/shikhon-rahaman/carbonlens/actions/workflows/web.yml/badge.svg)](https://github.com/shikhon-rahaman/carbonlens/actions/workflows/web.yml)
@@ -218,7 +233,7 @@ Open a PowerShell terminal at the repository root, set development-only values
 in root `.env`, then run:
 
 ```powershell
-.\ai-verifier\.venv\Scripts\python.exe -m uvicorn main:app --app-dir api --host 0.0.0.0 --port 8000
+.\ai-verifier\.venv\Scripts\python.exe -m uvicorn main:app --app-dir api --host 127.0.0.1 --port 8000
 ```
 
 ### Start the web application
