@@ -44,8 +44,8 @@ data”; live requests can use a cached fallback if the provider is unavailable.
   reproducible and clearly labeling cached data.
 - Checking overlapping geographic claims across off-chain geometry and
   on-chain geohash-cell representations.
-- Keeping a deployment suitable for a free-tier demonstration while protecting
-  verifier credentials and retaining Turnstile and rate controls.
+- Preparing optional free-tier hosting instructions while protecting verifier
+  credentials and retaining Turnstile and rate controls.
 
 ## Accomplishments
 
@@ -79,8 +79,9 @@ controls have thresholds and evasion limits.
 Next.js, React, TypeScript, Tailwind CSS, FastAPI, Pydantic, SQLAlchemy,
 PostgreSQL, SQLite, Python, Shapely, Rasterio, PyProj, Sentinel-2 STAC,
 Microsoft Planetary Computer, Solidity, OpenZeppelin ERC-1155, Hardhat,
-Sepolia, Cloudflare Turnstile, Vercel, Render, Playwright, Ruff, Bandit,
-pip-audit, npm audit, Slither, Solhint, and Gitleaks.
+Sepolia, Cloudflare Turnstile, Playwright, Ruff, Bandit, pip-audit, npm audit,
+Slither, Solhint, and Gitleaks. Vercel and Render are optional hosting platforms
+documented for future use; the submission was not deployed there.
 
 ## Track alignment
 
@@ -104,4 +105,4 @@ does not certify carbon credits or prove carbon storage.
 - Repository: https://github.com/shikhon-rahaman/carbonlens
 - Sepolia contract: https://sepolia.etherscan.io/address/0x92ba65bF082Ed142A32037ad8cBb21a82E2776A8
 - Evidence transaction (38 testnet ERC-1155 credits): https://sepolia.etherscan.io/tx/0x9634b36e29dac9e3a71ec882179bba055c6533f65e268854865a3c42b6135b1e
-- Live demo: <VERCEL-URL>
+- Demo: watch the video linked on our Devpost submission, or run it locally (instructions below).

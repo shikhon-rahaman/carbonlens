@@ -1,9 +1,11 @@
-# Free-tier deployment guide
+# Optional hosted deployment guide
 
-This guide deploys the **testnet demo** using Vercel for the web app, a Render
-free web service for the API, Render Postgres, and Cloudflare Turnstile. It does
-not deploy or alter the Sepolia contract. Configure only burner testnet
-credentials; never use a deployer key for the running API.
+> Hosting is optional and was not used for the hackathon submission. This guide
+> documents a possible hosted deployment of the **testnet demo** using Vercel
+> for the web app, a Render free web service for the API, Render Postgres, and
+> Cloudflare Turnstile. It does not deploy or alter the Sepolia contract.
+> Configure only burner testnet credentials; never use a deployer key for the
+> running API.
 
 ## 1. Render Postgres
 

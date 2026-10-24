@@ -21,12 +21,34 @@ over-interpret them.
 
 ```mermaid
 flowchart LR
+    subgraph Local["Local run"]
+        User[User / browser] --> Web[Next.js web app]
+        Web -->|GeoJSON, claim, Turnstile token| API[FastAPI service]
+        Web -.->|bot challenge| TS[Cloudflare Turnstile]
+        API -->|server-side token verification| TS
+        API --> Verify[Bounded validation and NDVI scoring]
+        Verify -->|live imagery path| MPC[Microsoft Planetary Computer Sentinel-2]
+        Verify -->|demo or fallback| Cache[Packaged cached sample NDVI]
+        API --> DB[(Postgres or SQLite)]
+        API --> Pinning[Evidence pinning provider, if configured]
+        API -->|privileged attestation| Sepolia[Sepolia ERC-1155 registry]
+        Web -->|public results and transaction links| User
+    end
+```
+
+## Optional hosted deployment (not deployed for the hackathon)
+
+The following is a deployment option documented for future use; the hackathon
+submission runs locally and does not have a hosted web or API site.
+
+```mermaid
+flowchart LR
     User[User / browser] --> Web[Vercel web app]
     Web -->|GeoJSON, claim, Turnstile token| API[Render FastAPI service]
     Web -.->|bot challenge| TS[Cloudflare Turnstile]
     API -->|server-side token verification| TS
     API --> Verify[Bounded validation and NDVI scoring]
-    Verify -->|live path| MPC[Microsoft Planetary Computer Sentinel-2]
+    Verify -->|live imagery path| MPC[Microsoft Planetary Computer Sentinel-2]
     Verify -->|demo or fallback| Cache[Packaged cached sample NDVI]
     API --> DB[(Render Postgres)]
     API --> Pinning[Evidence pinning provider, if configured]
@@ -83,7 +105,10 @@ verified carbon offsets.
 | API | FastAPI, Pydantic, SQLAlchemy, PostgreSQL / SQLite |
 | Geospatial and imagery | Python, Shapely, Rasterio, PyProj, Sentinel-2 STAC |
 | Smart contracts | Solidity, OpenZeppelin ERC-1155, Hardhat, Sepolia |
-| Operations and security | Vercel, Render, Cloudflare Turnstile, Ruff, Bandit, pip-audit, npm audit, Slither, Solhint, Gitleaks |
+| Operations and security | Cloudflare Turnstile, Ruff, Bandit, pip-audit, npm audit, Slither, Solhint, Gitleaks |
+
+Vercel and Render are documented as optional hosting platforms; neither was
+used to deploy the hackathon submission.
 
 ## Track alignment: Carbon Markets & Emissions Transparency
 
@@ -101,7 +126,7 @@ carbon or certify projects.
 | Innovation & Creativity | A connected geospatial, scoring, duplicate-checking, and testnet-attestation demo. |
 | Technical Execution | Bounded API inputs, live imagery retrieval with cached fallback, persistence, ERC-1155 registration, CI, and automated tests. |
 | Practical Usefulness | Readable score components, flags, evidence identifiers, source labels, and duplicate/rejection outcomes for review. |
-| Presentation & Communication | Public methodology, threat model, responsible-AI notes, API contract, and explicit demo limitations. |
+| Presentation & Communication | Public methodology, threat model, responsible-AI notes, API contract, and clear cached-sample/demo limitations. |
 
 ## Security and responsible AI
 
@@ -126,9 +151,9 @@ audit currently has unresolved advisories; details are in the security report.
   thresholds may evade detection.
 - This is a Sepolia testnet demo using burner testnet keys, not a production
   carbon registry. No third-party audit has been performed.
-- The planned free Render API service sleeps after inactivity; its first
-  request after sleeping can take about a minute. Render Postgres and free-tier
-  availability have platform limits.
+- The optional [hosted deployment guide](./docs/DEPLOYMENT.md) describes
+  free-tier platform limits. No hosted web or API site was deployed for the
+  hackathon.
 - `npm audit` reports unresolved Web dependency vulnerabilities; see
   [SECURITY_REPORT.md](./docs/SECURITY_REPORT.md).
 
@@ -139,9 +164,9 @@ audit currently has unresolved advisories; details are in the security report.
 - More biomes and region-specific evaluation.
 - Zero-knowledge proofs for selective evidence and attestation checks.
 
-## Live demo
+## Demo
 
-Live demo: <VERCEL-URL>
+Demo: watch the video linked on our Devpost submission, or run it locally (instructions below).
 
 ## CI
 
