@@ -104,5 +104,8 @@ does not certify carbon credits or prove carbon storage.
 
 - Repository: https://github.com/shikhon-rahaman/carbonlens
 - Sepolia contract: https://sepolia.etherscan.io/address/0x92ba65bF082Ed142A32037ad8cBb21a82E2776A8
-- Evidence transaction (38 testnet ERC-1155 credits): https://sepolia.etherscan.io/tx/0x9634b36e29dac9e3a71ec882179bba055c6533f65e268854865a3c42b6135b1e
+- Example Sepolia registrations (each mints 38 testnet ERC-1155 credits for a
+  40 ha sample):
+  - Original: https://sepolia.etherscan.io/tx/0x9634b36e29dac9e3a71ec882179bba055c6533f65e268854865a3c42b6135b1e
+  - Additional: https://sepolia.etherscan.io/tx/0xf96b759e2f805769425562cd20e0b1dc79c565c9c63433c66669c3c127208e41
 - Demo: watch the video linked on our Devpost submission, or run it locally (instructions below).

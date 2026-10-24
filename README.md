@@ -79,7 +79,10 @@ quality.
 
 - **Network:** Sepolia (chain ID `11155111`).
 - **Registry contract:** [`0x92ba65bF082Ed142A32037ad8cBb21a82E2776A8` on Etherscan](https://sepolia.etherscan.io/address/0x92ba65bF082Ed142A32037ad8cBb21a82E2776A8)
-- **Example registration:** [transaction minting 38 ERC-1155 testnet credits for a 40 ha healthy-forest sample at score 95](https://sepolia.etherscan.io/tx/0x9634b36e29dac9e3a71ec882179bba055c6533f65e268854865a3c42b6135b1e)
+- **Example registrations:** both are Sepolia transactions minting 38 ERC-1155
+  testnet credits for a 40 ha sample:
+  - [Original registration (healthy-forest sample at score 95)](https://sepolia.etherscan.io/tx/0x9634b36e29dac9e3a71ec882179bba055c6533f65e268854865a3c42b6135b1e)
+  - [Additional registration](https://sepolia.etherscan.io/tx/0xf96b759e2f805769425562cd20e0b1dc79c565c9c63433c66669c3c127208e41)
 
 The credits are testnet demonstration artifacts, not tradable or independently
 verified carbon offsets.
